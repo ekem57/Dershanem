@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "380188625107",
+    "project_id": "dershane-d2a88",
+    "storage_bucket": "dershane-d2a88.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:380188625107:android:cb8a1dd0ee2574fd6fec26",
+        "android_client_info": {
+          "package_name": "com.mobile.dershane"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "380188625107-gu1qtf2akjgkrfdcrpivaga148bbdd3j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2opoz6EZb0B0GIlhid2bwfFAqDlFjds8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "380188625107-gu1qtf2akjgkrfdcrpivaga148bbdd3j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
