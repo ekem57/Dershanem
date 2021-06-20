@@ -68,7 +68,7 @@ class _OgrenciAnasayfaState extends State<OgrenciAnasayfa> with SingleTickerProv
                   spreadRadius: 4.94)
             ],
           ),
-          child:  Column(
+          child:  ListView(
             children: [
 
               StreamBuilder<QuerySnapshot>(

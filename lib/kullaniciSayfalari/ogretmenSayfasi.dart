@@ -24,6 +24,7 @@ class OgretmenDetaySayfasi extends StatefulWidget {
 class _OgretmenDetaySayfasiState extends State<OgretmenDetaySayfasi> with SingleTickerProviderStateMixin {
   TabController _tabController;
   String dogumtarih;
+  List<String> haftalikgunler = [];
   @override
   void initState() {
     super.initState();
@@ -36,7 +37,13 @@ class _OgretmenDetaySayfasiState extends State<OgretmenDetaySayfasi> with Single
     });
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     dogumtarih = formatter.format(widget.card['dogumTarihi'].toDate());
-
+    haftalikgunler.add("Pazartesi");
+    haftalikgunler.add("Salı");
+    haftalikgunler.add("Çarşamba");
+    haftalikgunler.add("Perşembe");
+    haftalikgunler.add("Cuma");
+    haftalikgunler.add("Cumartesi");
+    haftalikgunler.add("Pazar");
   }
 
   FirestoreDBService _firestoreDBService = locator<FirestoreDBService>();
@@ -254,19 +261,30 @@ class _OgretmenDetaySayfasiState extends State<OgretmenDetaySayfasi> with Single
 
 
                   ],),
-                  PageView(
-                    scrollDirection: Axis.horizontal,
-                    controller: _controller,
-                    children: <Widget>[
-                      pazartesi(),
-                      sali(),
-                      carsamba(),
-                      persembe(),
-                      cuma(),
-                      cumartesi(),
-                      pazar(),
-                    ],
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    child: FutureBuilder<QuerySnapshot>(
+                      future: filtrelistream(),
+                      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (!snapshot.hasData)
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        final int cardLength = snapshot.data.docs.length;
+
+                        return PageView.builder(
+                          itemBuilder: (context, index) {
+                            final DocumentSnapshot _card = snapshot.data.docs[index];
+                            return  program(_card);
+                          },
+                          itemCount: cardLength, // Can be null
+                        );
+
+                      },
+                    ),
                   ),
+
 
 
                 ],
@@ -278,7 +296,13 @@ class _OgretmenDetaySayfasiState extends State<OgretmenDetaySayfasi> with Single
     );
   }
 
-  Widget pazartesi() {
+  Future<QuerySnapshot> filtrelistream() async {
+    QuerySnapshot qn = await FirebaseFirestore.instance.collection("ogretmenprogram").doc("10").collection("program").orderBy('gun').get();
+    return qn;
+  }
+
+  Widget program(DocumentSnapshot _card) {
+    print(" gelen veri :"+_card['program'].length.toString());
     return ListView(
       children: [
         Container(
@@ -289,7 +313,7 @@ class _OgretmenDetaySayfasiState extends State<OgretmenDetaySayfasi> with Single
           child: Column(
             children: [
               Center(
-                child: Text("Pazartesi",
+                child: Text(haftalikgunler[_card['gun']-1],
                     style: const TextStyle(
                         color: const Color(0xff343633),
                         fontWeight: FontWeight.w700,
@@ -299,9 +323,46 @@ class _OgretmenDetaySayfasiState extends State<OgretmenDetaySayfasi> with Single
                     textAlign: TextAlign.center),
               ),
 
-              DersProgramiCard(sinif: "MF-4",saatbaslangic: "09:00",saatbitis: "09:40",ders: "Karekök alma işlemleri",),
-              DersProgramiCard(sinif: "MF-4",saatbaslangic: "09:50",saatbitis: "10:30",ders: "İntegral giriş",),
-              DersProgramiCard(sinif: "MF-4",saatbaslangic: "12:30",saatbitis: "13:10",ders: "Türev giriş",),
+
+              _card['program'].length==3 ?   DersProgramiCard( sinif: _card['program'][2],saatbaslangic: _card['program'][0].toString().substring(0,5),saatbitis: dersbitis(_card['program'][0].toString()),ders: _card['program'][1],):
+
+              _card['program'].length==6 ?
+              Column(
+                children: [
+                  DersProgramiCard( sinif: _card['program'][2],saatbaslangic: _card['program'][0].toString().substring(0,5),saatbitis: dersbitis(_card['program'][0].toString()),ders: _card['program'][1],),
+                  DersProgramiCard( sinif: _card['program'][5],saatbaslangic: _card['program'][3].toString().substring(0,5),saatbitis:dersbitis( _card['program'][3].toString()),ders: _card['program'][4],),
+                ],
+              ) :
+
+              _card['program'].length==9 ?  Column(
+                children: [
+                DersProgramiCard( sinif: _card['program'][2],saatbaslangic: _card['program'][0].toString().substring(0,5),saatbitis: dersbitis(_card['program'][0].toString()),ders: _card['program'][1],),
+                DersProgramiCard( sinif: _card['program'][5],saatbaslangic: _card['program'][3].toString().substring(0,5),saatbitis:dersbitis( _card['program'][3].toString()),ders: _card['program'][4],),
+                DersProgramiCard( sinif: _card['program'][8],saatbaslangic: _card['program'][6].toString().substring(0,5),saatbitis:dersbitis( _card['program'][6].toString()),ders: _card['program'][7],),
+
+                ],
+              ) :
+
+              _card['program'].length==12 ?  Column(
+                children: [
+                  DersProgramiCard( sinif: _card['program'][2],saatbaslangic: _card['program'][0].toString().substring(0,5),saatbitis: dersbitis(_card['program'][0].toString()),ders: _card['program'][1],),
+                  DersProgramiCard( sinif: _card['program'][5],saatbaslangic: _card['program'][3].toString().substring(0,5),saatbitis:dersbitis( _card['program'][3].toString()),ders: _card['program'][4],),
+                  DersProgramiCard( sinif: _card['program'][8],saatbaslangic: _card['program'][6].toString().substring(0,5),saatbitis:dersbitis( _card['program'][6].toString()),ders: _card['program'][7],),
+                  DersProgramiCard( sinif: _card['program'][11],saatbaslangic: _card['program'][9].toString().substring(0,5),saatbitis:dersbitis( _card['program'][9].toString()),ders: _card['program'][10],),
+                ],
+              ) :
+
+              _card['program'].length==15 ?  Column(
+                children: [
+                  DersProgramiCard( sinif: _card['program'][2],saatbaslangic: _card['program'][0].toString().substring(0,5),saatbitis: dersbitis(_card['program'][0].toString()),ders: _card['program'][1],),
+                  DersProgramiCard( sinif: _card['program'][5],saatbaslangic: _card['program'][3].toString().substring(0,5),saatbitis:dersbitis( _card['program'][3].toString()),ders: _card['program'][4],),
+                  DersProgramiCard( sinif: _card['program'][8],saatbaslangic: _card['program'][6].toString().substring(0,5),saatbitis:dersbitis( _card['program'][6].toString()),ders: _card['program'][7],),
+                  DersProgramiCard( sinif: _card['program'][11],saatbaslangic: _card['program'][9].toString().substring(0,5),saatbitis:dersbitis( _card['program'][9].toString()),ders: _card['program'][10],),
+                  DersProgramiCard( sinif: _card['program'][14],saatbaslangic: _card['program'][12].toString().substring(0,5),saatbitis: dersbitis( _card['program'][12].toString()),ders: _card['program'][13],),
+                ],
+              ) : Container(),
+
+
 
 
             ],
@@ -311,205 +372,18 @@ class _OgretmenDetaySayfasiState extends State<OgretmenDetaySayfasi> with Single
     );
   }
 
-  Widget sali() {
-    return ListView(
-      children: [
-        Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height - 80,
-          margin: EdgeInsets.only(top: 12.70),
+  String dersbitis(String saat){
+    int dakikasi= int.parse(saat.substring(3,5));
+   int saati= int.parse(saat.substring(0,2));
+   dakikasi=dakikasi+40;
+   if(dakikasi>=60){
+     saati++;
+    dakikasi= dakikasi-60;
+   }
 
-          child: Column(
-            children: [
-              Center(
-                child: Text("Salı",
-                    style: const TextStyle(
-                        color: const Color(0xff343633),
-                        fontWeight: FontWeight.w700,
-                        fontFamily: "OpenSans",
-                        fontStyle: FontStyle.italic,
-                        fontSize: 25.0),
-                    textAlign: TextAlign.center),
-              ),
-
-              DersProgramiCard(sinif: "TM-6",saatbaslangic: "09:00",saatbitis: "09:40",ders: "Karekök alma işlemleri",),
-              DersProgramiCard(sinif: "TM-6",saatbaslangic: "09:50",saatbitis: "10:30",ders: "İntegral giriş",),
-              DersProgramiCard(sinif: "TM-6",saatbaslangic: "12:30",saatbitis: "13:10",ders: "Türev giriş",),
-
-
-            ],
-          ),
-        ),
-      ],
-    );
+   String yenitarih=saati <10 ? "0"+saati.toString()+":"+dakikasi.toString() : saati.toString()+":"+dakikasi.toString();
+   return yenitarih;
   }
 
 
-  Widget carsamba() {
-    return ListView(
-      children: [
-        Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height - 80,
-          margin: EdgeInsets.only(top: 12.70),
-
-          child: Column(
-            children: [
-              Center(
-                child: Text("Çarşamba",
-                    style: const TextStyle(
-                        color: const Color(0xff343633),
-                        fontWeight: FontWeight.w700,
-                        fontFamily: "OpenSans",
-                        fontStyle: FontStyle.italic,
-                        fontSize: 25.0),
-                    textAlign: TextAlign.center),
-              ),
-
-              DersProgramiCard(sinif: "MF-4",saatbaslangic: "09:00",saatbitis: "09:40",ders: "Karekök alma işlemleri",),
-              DersProgramiCard(sinif: "MF-4",saatbaslangic: "09:50",saatbitis: "10:30",ders: "İntegral giriş",),
-              DersProgramiCard(sinif: "MF-4",saatbaslangic: "12:30",saatbitis: "13:10",ders: "Türev giriş",),
-
-
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-
-  Widget persembe() {
-    return ListView(
-      children: [
-        Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height - 80,
-          margin: EdgeInsets.only(top: 12.70),
-
-          child: Column(
-            children: [
-              Center(
-                child: Text("Perşembe",
-                    style: const TextStyle(
-                        color: const Color(0xff343633),
-                        fontWeight: FontWeight.w700,
-                        fontFamily: "OpenSans",
-                        fontStyle: FontStyle.italic,
-                        fontSize: 25.0),
-                    textAlign: TextAlign.center),
-              ),
-
-              DersProgramiCard(sinif: "MF-4",saatbaslangic: "09:00",saatbitis: "09:40",ders: "Karekök alma işlemleri",),
-              DersProgramiCard(sinif: "MF-4",saatbaslangic: "09:50",saatbitis: "10:30",ders: "İntegral giriş",),
-              DersProgramiCard(sinif: "MF-4",saatbaslangic: "12:30",saatbitis: "13:10",ders: "Türev giriş",),
-
-
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-
-  Widget cuma() {
-    return ListView(
-      children: [
-        Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height - 80,
-          margin: EdgeInsets.only(top: 12.70),
-
-          child: Column(
-            children: [
-              Center(
-                child: Text("Cuma",
-                    style: const TextStyle(
-                        color: const Color(0xff343633),
-                        fontWeight: FontWeight.w700,
-                        fontFamily: "OpenSans",
-                        fontStyle: FontStyle.italic,
-                        fontSize: 25.0),
-                    textAlign: TextAlign.center),
-              ),
-
-              DersProgramiCard(sinif: "MF-4",saatbaslangic: "09:00",saatbitis: "09:40",ders: "Karekök alma işlemleri",),
-              DersProgramiCard(sinif: "MF-4",saatbaslangic: "09:50",saatbitis: "10:30",ders: "İntegral giriş",),
-              DersProgramiCard(sinif: "MF-4",saatbaslangic: "12:30",saatbitis: "13:10",ders: "Türev giriş",),
-
-
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-
-  Widget cumartesi() {
-    return ListView(
-      children: [
-        Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height - 80,
-          margin: EdgeInsets.only(top: 12.70),
-
-          child: Column(
-            children: [
-              Center(
-                child: Text("Cumartesi",
-                    style: const TextStyle(
-                        color: const Color(0xff343633),
-                        fontWeight: FontWeight.w700,
-                        fontFamily: "OpenSans",
-                        fontStyle: FontStyle.italic,
-                        fontSize: 25.0),
-                    textAlign: TextAlign.center),
-              ),
-
-              DersProgramiCard(sinif: "MF-4",saatbaslangic: "09:00",saatbitis: "09:40",ders: "Karekök alma işlemleri",),
-              DersProgramiCard(sinif: "MF-4",saatbaslangic: "09:50",saatbitis: "10:30",ders: "İntegral giriş",),
-              DersProgramiCard(sinif: "MF-4",saatbaslangic: "12:30",saatbitis: "13:10",ders: "Türev giriş",),
-
-
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget pazar() {
-    return ListView(
-      children: [
-        Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height - 80,
-          margin: EdgeInsets.only(top: 12.70),
-
-          child: Column(
-            children: [
-              Center(
-                child: Text("Pazar",
-                    style: const TextStyle(
-                        color: const Color(0xff343633),
-                        fontWeight: FontWeight.w700,
-                        fontFamily: "OpenSans",
-                        fontStyle: FontStyle.italic,
-                        fontSize: 25.0),
-                    textAlign: TextAlign.center),
-              ),
-
-              DersProgramiCard(sinif: "MF-4",saatbaslangic: "09:00",saatbitis: "09:40",ders: "Karekök alma işlemleri",),
-              DersProgramiCard(sinif: "MF-4",saatbaslangic: "09:50",saatbitis: "10:30",ders: "İntegral giriş",),
-              DersProgramiCard(sinif: "MF-4",saatbaslangic: "12:30",saatbitis: "13:10",ders: "Türev giriş",),
-
-
-            ],
-          ),
-        ),
-      ],
-    );
-  }
 }

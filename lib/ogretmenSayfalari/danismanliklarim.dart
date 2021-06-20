@@ -70,7 +70,7 @@ class _DanismanSiniflarimState extends State<DanismanSiniflarim> with SingleTick
                   spreadRadius: 4.94)
             ],
           ),
-          child:  Column(
+          child:  ListView(
             children: [
 
               StreamBuilder<QuerySnapshot>(

@@ -237,6 +237,44 @@ class FirestoreDBService  {
     return true;
   }
 
+  @override
+  Future<bool> ogretmenDersPorgramiAta(Map<String,dynamic>  program,String ogretmenid) async {
+    await _firebaseDB
+        .collection("ogretmenprogram")
+        .doc(ogretmenid)
+        .collection("program")
+        .doc()
+        .set(program);
+
+    return true;
+  }
+
+  @override
+  Future<bool> ogrenciDersPorgramiAta(Map<String,dynamic>  program,String sinifid) async {
+    await _firebaseDB
+        .collection("siniflar")
+        .doc(sinifid)
+        .collection("program")
+        .doc()
+        .set(program);
+
+    return true;
+  }
+
+  @override
+  Future<bool> ogrenciSinavNotlari(Map<String,dynamic>  program,String ogrencino) async {
+    QuerySnapshot ogrenciId= await _firebaseDB.collection("ogrenci").where("ogrenciNo",isEqualTo:ogrencino).get();
+    print("gelen idler:"+ogrenciId.docs[0].id);
+    await _firebaseDB
+        .collection("ogrenci")
+        .doc(ogrenciId.docs[0].id)
+        .collection("sinavnotlari")
+        .doc()
+        .set(program);
+
+    return true;
+  }
+
 
   @override
   Future<bool> ogretmenTavsiye(Map<String,dynamic> tavsiye,String ogrenciId) async {

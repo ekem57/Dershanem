@@ -2,6 +2,12 @@
   "configVersion": 2,
   "packages": [
     {
+      "name": "archive",
+      "rootUri": "file:///Users/emre/development/flutter/.pub-cache/hosted/pub.dartlang.org/archive-3.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "async",
       "rootUri": "file:///Users/emre/development/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.5.0",
       "packageUri": "lib/",
@@ -74,6 +80,18 @@
       "languageVersion": "2.0"
     },
     {
+      "name": "equatable",
+      "rootUri": "file:///Users/emre/development/flutter/.pub-cache/hosted/pub.dartlang.org/equatable-2.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "excel",
+      "rootUri": "file:///Users/emre/development/flutter/.pub-cache/hosted/pub.dartlang.org/excel-2.0.0-null-safety-3",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "fake_async",
       "rootUri": "file:///Users/emre/development/flutter/.pub-cache/hosted/pub.dartlang.org/fake_async-1.2.0",
       "packageUri": "lib/",
@@ -88,6 +106,12 @@
     {
       "name": "file",
       "rootUri": "file:///Users/emre/development/flutter/.pub-cache/hosted/pub.dartlang.org/file-6.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "file_picker",
+      "rootUri": "file:///Users/emre/development/flutter/.pub-cache/hosted/pub.dartlang.org/file_picker-3.0.2+2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -308,6 +332,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "petitparser",
+      "rootUri": "file:///Users/emre/development/flutter/.pub-cache/hosted/pub.dartlang.org/petitparser-4.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "platform",
       "rootUri": "file:///Users/emre/development/flutter/.pub-cache/hosted/pub.dartlang.org/platform-3.0.0",
       "packageUri": "lib/",
@@ -398,13 +428,19 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "xml",
+      "rootUri": "file:///Users/emre/development/flutter/.pub-cache/hosted/pub.dartlang.org/xml-5.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "dershane",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "2.7"
     }
   ],
-  "generated": "2021-05-30T10:09:57.210595Z",
+  "generated": "2021-06-08T20:16:51.382502Z",
   "generator": "pub",
   "generatorVersion": "2.12.3"
 }
