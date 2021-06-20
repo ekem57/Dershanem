@@ -163,6 +163,12 @@ class FirestoreDBService  {
   }
 
   @override
+  Future<String> ogrenciIdBul(String no) async {
+   QuerySnapshot veri= await _firebaseDB.collection("ogrenci").where("ogrenciNo",isEqualTo: no).get();
+    return veri.docs[0].id;
+  }
+
+  @override
   Future<bool> ogrenciOnay(String ogrenciNo,String ogrenciid) async {
     await _firebaseDB
         .collection("ogrenci")
@@ -171,6 +177,25 @@ class FirestoreDBService  {
 
     return true;
   }
+
+  @override
+  Future<bool> ogretmenOnay(DocumentSnapshot card) async {
+    await card.reference
+        .update({'hesapOnay':true});
+
+    return true;
+  }
+
+  @override
+  Future<bool> yoneticiOnay(DocumentSnapshot card) async {
+    await card.reference
+        .update({'hesapOnay':true});
+
+    return true;
+  }
+
+
+
   @override
   Future<bool> ogretmenTelefonGuncelle(String ogretmenid,String tel) async {
     await _firebaseDB

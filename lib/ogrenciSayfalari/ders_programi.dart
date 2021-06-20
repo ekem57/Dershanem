@@ -84,10 +84,10 @@ class _DersProgramiState extends State<DersProgrami> with SingleTickerProviderSt
                 child: CircularProgressIndicator(),
               );
             final int cardLength = snapshot.data.docs.length;
-
             return PageView.builder(
               itemBuilder: (context, index) {
                 final DocumentSnapshot _card = snapshot.data.docs[index];
+                print("gelen gun:"+_card['gun'].toString());
                 return  program(_card);
               },
               itemCount: cardLength, // Can be null
@@ -102,20 +102,21 @@ class _DersProgramiState extends State<DersProgrami> with SingleTickerProviderSt
 
   Future<QuerySnapshot> filtrelistream() async {
     final _ogrenciModel = Provider.of<OgrenciModel>(context, listen: false);
-    QuerySnapshot qn = await FirebaseFirestore.instance.collection("siniflar").doc(_ogrenciModel.user.sinif.toLowerCase().toString()).collection("program").orderBy('gun').get();
+    QuerySnapshot qn = await FirebaseFirestore.instance.collection("siniflar").doc(_ogrenciModel.user.dershaneSinif.toLowerCase().toString()).collection("program").orderBy('gun').get();
     return qn;
   }
 
   Widget program(DocumentSnapshot _card) {
-    print(" gelen veri :"+_card['program'].length.toString());
     return ListView(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
       children: [
         Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height - 80,
           margin: EdgeInsets.only(top: 12.70),
 
-          child: Column(
+          child: ListView(
             children: [
               Center(
                 child: Text(haftalikgunler[_card['gun']-1],
@@ -143,7 +144,7 @@ class _DersProgramiState extends State<DersProgrami> with SingleTickerProviderSt
                 children: [
                   OgrenciDersProgramiCard(saatbaslangic: _card['program'][0].toString().substring(0,5),saatbitis: dersbitis(_card['program'][0].toString()),ders: _card['program'][1],),
                   OgrenciDersProgramiCard(saatbaslangic: _card['program'][2].toString().substring(0,5),saatbitis:dersbitis( _card['program'][2].toString()),ders: _card['program'][3],),
-                  OgrenciDersProgramiCard(saatbaslangic: _card['program'][4].toString().substring(0,5),saatbitis:dersbitis( _card['program'][3].toString()),ders: _card['program'][5],),
+                  OgrenciDersProgramiCard(saatbaslangic: _card['program'][4].toString().substring(0,5),saatbitis:dersbitis( _card['program'][4].toString()),ders: _card['program'][5],),
                 ],
               ) :
 
@@ -151,7 +152,7 @@ class _DersProgramiState extends State<DersProgrami> with SingleTickerProviderSt
                 children: [
                   OgrenciDersProgramiCard(saatbaslangic: _card['program'][0].toString().substring(0,5),saatbitis: dersbitis(_card['program'][0].toString()),ders: _card['program'][1],),
                   OgrenciDersProgramiCard(saatbaslangic: _card['program'][2].toString().substring(0,5),saatbitis:dersbitis( _card['program'][2].toString()),ders: _card['program'][3],),
-                  OgrenciDersProgramiCard(saatbaslangic: _card['program'][4].toString().substring(0,5),saatbitis:dersbitis( _card['program'][3].toString()),ders: _card['program'][5],),
+                  OgrenciDersProgramiCard(saatbaslangic: _card['program'][4].toString().substring(0,5),saatbitis:dersbitis( _card['program'][4].toString()),ders: _card['program'][5],),
                   OgrenciDersProgramiCard(saatbaslangic: _card['program'][6].toString().substring(0,5),saatbitis:dersbitis( _card['program'][6].toString()),ders: _card['program'][7],),
                 ],
               ) :
@@ -160,7 +161,7 @@ class _DersProgramiState extends State<DersProgrami> with SingleTickerProviderSt
                 children: [
                   OgrenciDersProgramiCard(saatbaslangic: _card['program'][0].toString().substring(0,5),saatbitis: dersbitis(_card['program'][0].toString()),ders: _card['program'][1],),
                   OgrenciDersProgramiCard(saatbaslangic: _card['program'][2].toString().substring(0,5),saatbitis:dersbitis( _card['program'][2].toString()),ders: _card['program'][3],),
-                  OgrenciDersProgramiCard(saatbaslangic: _card['program'][4].toString().substring(0,5),saatbitis:dersbitis( _card['program'][3].toString()),ders: _card['program'][5],),
+                  OgrenciDersProgramiCard(saatbaslangic: _card['program'][4].toString().substring(0,5),saatbitis:dersbitis( _card['program'][4].toString()),ders: _card['program'][5],),
                   OgrenciDersProgramiCard(saatbaslangic: _card['program'][6].toString().substring(0,5),saatbitis:dersbitis( _card['program'][6].toString()),ders: _card['program'][7],),
                   OgrenciDersProgramiCard(saatbaslangic: _card['program'][8].toString().substring(0,5),saatbitis: dersbitis( _card['program'][8].toString()),ders: _card['program'][9],),
                 ],
@@ -168,15 +169,27 @@ class _DersProgramiState extends State<DersProgrami> with SingleTickerProviderSt
                 children: [
                   OgrenciDersProgramiCard(saatbaslangic: _card['program'][0].toString().substring(0,5),saatbitis: dersbitis(_card['program'][0].toString()),ders: _card['program'][1],),
                   OgrenciDersProgramiCard(saatbaslangic: _card['program'][2].toString().substring(0,5),saatbitis:dersbitis( _card['program'][2].toString()),ders: _card['program'][3],),
-                  OgrenciDersProgramiCard(saatbaslangic: _card['program'][4].toString().substring(0,5),saatbitis:dersbitis( _card['program'][3].toString()),ders: _card['program'][5],),
+                  OgrenciDersProgramiCard(saatbaslangic: _card['program'][4].toString().substring(0,5),saatbitis:dersbitis( _card['program'][4].toString()),ders: _card['program'][5],),
                   OgrenciDersProgramiCard(saatbaslangic: _card['program'][6].toString().substring(0,5),saatbitis:dersbitis( _card['program'][6].toString()),ders: _card['program'][7],),
                   OgrenciDersProgramiCard(saatbaslangic: _card['program'][8].toString().substring(0,5),saatbitis: dersbitis( _card['program'][8].toString()),ders: _card['program'][9],),
                   OgrenciDersProgramiCard(saatbaslangic: _card['program'][10].toString().substring(0,5),saatbitis: dersbitis( _card['program'][10].toString()),ders: _card['program'][11],),
                 ],
-              ) : Container(),
+              ) :
+              _card['program'].length==14 ?  Column(
+                children: [
+                  OgrenciDersProgramiCard(saatbaslangic: _card['program'][0].toString().substring(0,5),saatbitis: dersbitis(_card['program'][0].toString()),ders: _card['program'][1],),
+                  OgrenciDersProgramiCard(saatbaslangic: _card['program'][2].toString().substring(0,5),saatbitis:dersbitis( _card['program'][2].toString()),ders: _card['program'][3],),
+                  OgrenciDersProgramiCard(saatbaslangic: _card['program'][4].toString().substring(0,5),saatbitis:dersbitis( _card['program'][4].toString()),ders: _card['program'][5],),
+                  OgrenciDersProgramiCard(saatbaslangic: _card['program'][6].toString().substring(0,5),saatbitis:dersbitis( _card['program'][6].toString()),ders: _card['program'][7],),
+                  OgrenciDersProgramiCard(saatbaslangic: _card['program'][8].toString().substring(0,5),saatbitis: dersbitis( _card['program'][8].toString()),ders: _card['program'][9],),
+                  OgrenciDersProgramiCard(saatbaslangic: _card['program'][10].toString().substring(0,5),saatbitis: dersbitis( _card['program'][10].toString()),ders: _card['program'][11],),
+                  OgrenciDersProgramiCard(saatbaslangic: _card['program'][12].toString().substring(0,5),saatbitis: dersbitis( _card['program'][12].toString()),ders: _card['program'][13],),
+                ],
+              ) :
+              Container(),
 
 
-
+            SizedBox(height: 160,),
 
             ],
           ),
@@ -186,6 +199,7 @@ class _DersProgramiState extends State<DersProgrami> with SingleTickerProviderSt
   }
 
   String dersbitis(String saat){
+
     int dakikasi= int.parse(saat.substring(3,5));
     int saati= int.parse(saat.substring(0,2));
     dakikasi=dakikasi+40;

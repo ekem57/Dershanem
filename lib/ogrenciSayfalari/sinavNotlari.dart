@@ -8,11 +8,13 @@ import 'package:dershane/common/sinavSonucCard.dart';
 import 'package:dershane/extensions/renkler.dart';
 import 'package:dershane/firebase/firebase_database.dart';
 import 'package:dershane/locator.dart';
+import 'package:dershane/user_state/ogrenci_model_service.dart';
 import 'package:flutter/material.dart';
 import 'package:dershane/extensions/size_extention.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 
 class SinavNotlari extends StatefulWidget {
@@ -35,7 +37,7 @@ class _SinavNotlariState extends State<SinavNotlari> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-
+    final _ogrenciModel = Provider.of<OgrenciModel>(context, listen: true);
     return Scaffold(
       backgroundColor:  Renkler.appbarGroundColor,
       appBar: AppBar(
@@ -63,24 +65,33 @@ class _SinavNotlariState extends State<SinavNotlari> with SingleTickerProviderSt
                 spreadRadius: 4.94)
           ],
         ),
-        child: ListView(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height - 80,
-              margin: EdgeInsets.only(top: 12.70),
+        child:
+        StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection("ogrenci").doc(_ogrenciModel.user.userId).collection("sinavnotlari").snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (!snapshot.hasData) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
 
-              child: ListView(
-                children: [
-                 SinavSonucCard(baslik: "TYT 1",),
-                 SinavSonucCard(baslik: "TYT 2",),
-                 SinavSonucCard(baslik: "AYT 1",),
+        final int cardLength = snapshot.data.docs.length;
 
-                ],
-              ),
-            ),
-          ],
-        ),
+        return ListView.builder(
+          padding: EdgeInsets.all(0),
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: cardLength,
+          itemBuilder: (_, int index) {
+            final DocumentSnapshot _card = snapshot.data.docs[index];
+            return SinavSonucCard(baslik:_card['Sinav'],sayisalSonuc: _card['Sayisal'],esitSonuc:_card['EsitAgirlik'],sozelSonuc: _card['Sozel'],esitSiralama: _card['EsitAgirlikSiralama'],sayisalSiralama: _card['SayisalSiralama'],sozelSiralama: _card['SozelSiralama'],toplamkatilimci: _card['toplamkatilimci'].toString(),);
+          },
+        );
+      },
+    ),
+
+
+
       ),
     );
   }

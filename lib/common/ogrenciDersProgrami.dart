@@ -57,7 +57,7 @@ class OgrenciDersProgramiCard extends StatelessWidget {
                     ),
 
 
-
+                    Text(ders,style: TextStyle(fontSize: 16.0.spByWidth,fontWeight: FontWeight.bold),),
                   ],
                 ),
                 SizedBox(height: 10,),

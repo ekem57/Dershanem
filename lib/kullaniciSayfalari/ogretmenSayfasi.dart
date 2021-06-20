@@ -53,7 +53,7 @@ class _OgretmenDetaySayfasiState extends State<OgretmenDetaySayfasi> with Single
 
     return Scaffold(
       floatingActionButton:
-      MyFloatingButton(tabController: _tabController, pushableScreens: [OgretmenDanismanlikAta(card: widget.card,),Container()]),
+      _tabController.index==0 ? MyFloatingButton(tabController: _tabController, pushableScreens: [OgretmenDanismanlikAta(card: widget.card,),Container()]) :Container(),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       backgroundColor:  Renkler.appbarGroundColor,
       appBar: AppBar(

@@ -539,8 +539,9 @@ class _Kayit_SayfasiState extends State<Kayit_Sayfasi> {
 
 
                                 }else if(widget.kayitTuru=="Veli"){
-                                  print("veli girdi");
-                                  Veli _veli= Veli(telefon: "+90"+controller.text.replaceAll('-', ''),email:_emailcontroller.text,adsoyad: _adsoyadcontroller.text,cinsiyet: cinsiyet,danisman: null,ogrencisininIdsi: _ogrenciId.text);
+                                  String id= await _firestoreDBService.ogrenciIdBul(_ogrenciId.text);
+
+                                  Veli _veli= Veli(telefon: "+90"+controller.text.replaceAll('-', ''),email:_emailcontroller.text,adsoyad: _adsoyadcontroller.text,cinsiyet: cinsiyet,danisman: null,ogrencisininNo: _ogrenciId.text,ogrencisininIdsi: id);
 
                                   try{
                                     Veli veli= await _modelveli.createUserWithEmailandPasswordVeli(_emailcontroller.text, _sifrecontroller.text, _veli);

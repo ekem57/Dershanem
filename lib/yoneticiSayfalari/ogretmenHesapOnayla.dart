@@ -32,7 +32,11 @@ class _OgretmenKayitOnaylaState extends State<OgretmenKayitOnayla> {
                 itemBuilder: (_, int index) {
                   final DocumentSnapshot _card = snapshot.data.docs[index];
 
-                  return OgretmenKayitKart(card: _card,onPressed: (){},);
+                  return OgretmenKayitKart(card: _card,onPressed: (){
+                    setState(() {
+
+                    });
+                  },);
                 },
               );
             },
@@ -42,6 +46,10 @@ class _OgretmenKayitOnaylaState extends State<OgretmenKayitOnayla> {
           ),
         ],
       ),
+
+
+
+
     );
   }
 }

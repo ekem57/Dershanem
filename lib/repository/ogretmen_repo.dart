@@ -49,7 +49,7 @@ class OgretmenRepo implements AuthBaseOgretmen {
   Future<Ogretmen> createUserWithEmailandPasswordOgretmen(String email, String sifre,Ogretmen users) async {
     Ogretmen _user = await _firebaseAuthService.createUserWithEmailandPasswordOgretmen(email, sifre,users);
 
-    bool _sonuc = await _firestoreDBService.saveOgretmen(Ogretmen(userId: _user.userId,telefon: users.telefon,email: email,adsoyad:users.email,cinsiyet: users.cinsiyet,dogumTarihi: users.dogumTarihi,avatarImageUrl: users.avatarImageUrl,brans: users.brans ));
+    bool _sonuc = await _firestoreDBService.saveOgretmen(Ogretmen(userId: _user.userId,telefon: users.telefon,email: email,adsoyad:users.email,cinsiyet: users.cinsiyet,dogumTarihi: users.dogumTarihi,avatarImageUrl: users.avatarImageUrl,brans: users.brans,hesaponay: false ));
     if (_sonuc) {
       return await _firestoreDBService.readOgretmen(_user.userId,email);
     }

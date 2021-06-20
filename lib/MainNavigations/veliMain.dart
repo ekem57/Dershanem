@@ -1,5 +1,7 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:dershane/VeliSayfalari/veliAnasayfa.dart';
+import 'package:dershane/VeliSayfalari/veliDanismanBilgileri.dart';
+import 'package:dershane/VeliSayfalari/veliogrencisininbilgileri.dart';
 import 'package:dershane/extensions/size_config.dart';
 import 'package:dershane/model/ogrenci.dart';
 import 'package:dershane/model/veliModel.dart';
@@ -182,8 +184,7 @@ class _VeliMainNavigationState extends State<VeliMainNavigation> {
               Icon(Icons.home, size: 40, color: Theme.of(context).backgroundColor),
               Icon(Icons.date_range, size: 30, color: Theme.of(context).backgroundColor),
               Icon(Icons.add, size: 30, color: Theme.of(context).backgroundColor),
-              Icon(Icons.message, size: 30, color: Theme.of(context).backgroundColor),
-              Icon(Icons.person, size: 30, color: Theme.of(context).backgroundColor),
+
             ],
             color: Theme.of(context).primaryColor,
             buttonBackgroundColor: Theme.of(context).primaryColor,
@@ -222,13 +223,10 @@ class _VeliMainNavigationState extends State<VeliMainNavigation> {
       case 0:
         return VeliAnasayfa();
       case 1:
-        return OgrenciAnasayfa();
+        return VeliOgrenciDetaySayfasi();
       case 2:
-        return OgrenciAnasayfa();
-      case 3:
-        return OgrenciAnasayfa();
-      case 4:
-        return OgrenciAnasayfa();
+        return VeliDanismanBilgileri();
+
     }
   }
 }

@@ -29,6 +29,7 @@ class _SinavNotlariState extends State<SinavNotlari> {
   String SayisalSiralama;
   String SozelSiralama;
   String EsitAgirlikSiralama;
+  String SinavBaslik;
   List<String> haftalikgunler = [];
 
   @override
@@ -102,6 +103,7 @@ class _SinavNotlariState extends State<SinavNotlari> {
                       SayisalSiralama = excel.tables["Sayfa1"].rows[i][4].props[0].toString();
                       SozelSiralama = excel.tables["Sayfa1"].rows[i][5].props[0].toString();
                       EsitAgirlikSiralama = excel.tables["Sayfa1"].rows[i][6].props[0].toString();
+                      SinavBaslik = excel.tables["Sayfa1"].rows[i][7].props[0].toString();
 
 
                       SinavNotlari['ogrenciNo'] =  ogrencino;
@@ -111,11 +113,13 @@ class _SinavNotlariState extends State<SinavNotlari> {
                       SinavNotlari['SayisalSiralama'] = SayisalSiralama;
                       SinavNotlari['SozelSiralama'] = SozelSiralama;
                       SinavNotlari['EsitAgirlikSiralama'] = EsitAgirlikSiralama;
+                      SinavNotlari['Sinav'] = SinavBaslik;
+                      SinavNotlari['toplamkatilimci'] = toplamrows.toString();
 
                       print("OGRENCİ Numarası:"+ogrencino);
-                      print("OGRENCİ Sayısal:"+Sayisal);
+                      print("OGRENCİ Sayısal:"+SinavBaslik);
 
-                      await _firebaseIslemleri.ogrenciSinavNotlari(SinavNotlari, ogrencino.toString());
+                      await _firebaseIslemleri.ogrenciSinavNotlari(SinavNotlari,double.parse(ogrencino).ceil().toString());
 
                     }
 

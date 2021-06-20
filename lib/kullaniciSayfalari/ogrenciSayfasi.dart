@@ -241,12 +241,32 @@ class _OgrenciDetaySayfasiState extends State<OgrenciDetaySayfasi> with SingleTi
 
 
                    ],),
-                  Column(
-                    children: [
-                      SinavSonucCard(baslik: "",),
-                      SinavSonucCard(baslik: "",),
-                    ],
-                  ),
+
+
+                  StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance.collection("ogrenci").doc(widget.card.id).collection("sinavnotlari").snapshots(),
+                      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (!snapshot.hasData) {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+
+                        final int cardLength = snapshot.data.docs.length;
+                        return ListView.builder(
+                          padding: EdgeInsets.all(0),
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: cardLength,
+                          itemBuilder: (_, int index) {
+                            final DocumentSnapshot _card = snapshot.data.docs[index];
+                            return SinavSonucCard(baslik:_card['Sinav'],sayisalSonuc: _card['Sayisal'],esitSonuc:_card['EsitAgirlik'],sozelSonuc: _card['Sozel'],esitSiralama: _card['EsitAgirlikSiralama'],sayisalSiralama: _card['SayisalSiralama'],sozelSiralama: _card['SozelSiralama'],toplamkatilimci: _card['toplamkatilimci'].toString(),);
+                          },
+                        );
+                      },
+                    ),
+
+
                   _buildYorumlar(),
 
                 ],

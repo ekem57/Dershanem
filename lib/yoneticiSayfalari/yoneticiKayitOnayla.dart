@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dershane/common/resimli_card.dart';
 import 'package:dershane/common/resimsizCard.dart';
+import 'package:dershane/common/yoneticiKayitKart.dart';
 import 'package:flutter/material.dart';
 import 'package:dershane/extensions/size_extention.dart';
 
@@ -18,6 +19,7 @@ class _YoneticiKayitOnaylaState extends State<YoneticiKayitOnayla> {
       ),
       body: ListView(
         children: [
+
           FutureBuilder<QuerySnapshot>(
             future: FirebaseFirestore.instance.collection("yonetici").where('hesapOnay',isEqualTo: false).get(),
             builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -33,14 +35,7 @@ class _YoneticiKayitOnaylaState extends State<YoneticiKayitOnayla> {
                 itemBuilder: (_, int index) {
                   final DocumentSnapshot _card = snapshot.data.docs[index];
 
-                  return ResimsizCard(
-                      icerik: "",
-                      baslik: _card['adSoyad'].toString(),
-                      tarih: "",
-                      onPressed: () {
-
-                      },
-                  );
+                  return YoneticiKayitKart(card: _card,onPressed: (){},);
                 },
               );
             },

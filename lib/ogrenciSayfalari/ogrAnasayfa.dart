@@ -10,7 +10,6 @@ import 'package:dershane/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:dershane/extensions/size_extention.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 
@@ -72,8 +71,7 @@ class _OgrenciAnasayfaState extends State<OgrenciAnasayfa> with SingleTickerProv
             children: [
 
               StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('duyurular').snapshots(),
+                stream: FirebaseFirestore.instance.collection('duyurular').snapshots(),
                 builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (!snapshot.hasData) {
                     return Center(

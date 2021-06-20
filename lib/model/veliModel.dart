@@ -7,6 +7,7 @@ class Veli extends ChangeNotifier {
   String password;
   String adsoyad;
   String ogrencisininIdsi;
+  String ogrencisininNo;
   String cinsiyet;
   String danisman;
 
@@ -20,6 +21,7 @@ class Veli extends ChangeNotifier {
     this.password,
     this.adsoyad,
     this.ogrencisininIdsi,
+    this.ogrencisininNo,
     this.cinsiyet,
     this.danisman,
   });
@@ -33,6 +35,7 @@ class Veli extends ChangeNotifier {
       'danisman':danisman,
       'cinsiyet':cinsiyet,
       'ogrencisininIdsi':ogrencisininIdsi,
+      'ogrencisininNo':ogrencisininNo,
 
     };
   }
@@ -44,6 +47,7 @@ class Veli extends ChangeNotifier {
         adsoyad = map['adSoyad'],
         danisman = map['danisman'],
         ogrencisininIdsi = map['ogrencisininIdsi'],
+        ogrencisininNo = map['ogrencisininNo'],
         cinsiyet = map['cinsiyet'];
 
 

@@ -4,18 +4,26 @@ import 'package:dershane/extensions/size_extention.dart';
 
 class SinavSonucCard extends StatelessWidget {
   final String baslik;
-  final String icerik;
-  String tarih;
-  final VoidCallback onPressed;
+  final String sayisalSonuc;
+  final String sozelSonuc;
+  final String esitSonuc;
+  final String esitSiralama;
+  final String sozelSiralama;
+  final String sayisalSiralama;
+  final String toplamkatilimci;
 
 
 
   SinavSonucCard(
       {Key key,
         this.baslik,
-        this.icerik,
-        this.tarih,
-        this.onPressed,
+        this.sayisalSonuc,
+        this.sozelSonuc,
+        this.esitSonuc,
+        this.esitSiralama,
+        this.sozelSiralama,
+        this.sayisalSiralama,
+        this.toplamkatilimci,
       })
       : assert(baslik != null ),
         super(key: key);
@@ -56,7 +64,7 @@ class SinavSonucCard extends StatelessWidget {
                           children: [
                             Text("Sayısal",style: TextStyle(fontSize: 15.0.spByWidth),),
                             SizedBox(height: 10,),
-                            Text("436.444",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15.0.spByWidth),),
+                            Text(sayisalSonuc,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15.0.spByWidth),),
                           ],
                         ),
 
@@ -64,7 +72,7 @@ class SinavSonucCard extends StatelessWidget {
                           children: [
                             Text("Eşit Ağırlık",style: TextStyle(fontSize: 15.0.spByWidth),),
                             SizedBox(height: 10,),
-                            Text("436.444",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15.0.spByWidth)),
+                            Text(esitSonuc,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15.0.spByWidth)),
                           ],
                         ),
 
@@ -72,7 +80,7 @@ class SinavSonucCard extends StatelessWidget {
                           children: [
                             Text("Sözel",style: TextStyle(fontSize: 15.0.spByWidth),),
                             SizedBox(height: 10,),
-                            Text("436.444",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15.0.spByWidth)),
+                            Text(sozelSonuc,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15.0.spByWidth)),
                           ],
                         ),
                       ],
@@ -83,7 +91,7 @@ class SinavSonucCard extends StatelessWidget {
                       child: Row(
                         children: [
                           Text("Toplam Katılımcı:  ",style: TextStyle(fontSize: 15.0.spByWidth)),
-                          Text("12032",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15.0.spByWidth)),
+                          Text(toplamkatilimci,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15.0.spByWidth)),
                         ],
                       ),
                     ),
@@ -93,8 +101,30 @@ class SinavSonucCard extends StatelessWidget {
                       padding:  EdgeInsets.only(left: 15),
                       child: Row(
                         children: [
-                          Text("Sıralaman:  ",style: TextStyle(fontSize: 15.0.spByWidth)),
-                          Text("1436",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15.0.spByWidth)),
+                          Text("Sayısal Sıralaman:  ",style: TextStyle(fontSize: 15.0.spByWidth)),
+                          Text(sayisalSiralama,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15.0.spByWidth)),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(height: 10.0.h,),
+                    Padding(
+                      padding:  EdgeInsets.only(left: 15),
+                      child: Row(
+                        children: [
+                          Text("Sözel Sıralaman:  ",style: TextStyle(fontSize: 15.0.spByWidth)),
+                          Text(sozelSiralama,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15.0.spByWidth)),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(height: 10.0.h,),
+                    Padding(
+                      padding:  EdgeInsets.only(left: 15),
+                      child: Row(
+                        children: [
+                          Text("Eşit Ağırlık Sıralaman:  ",style: TextStyle(fontSize: 15.0.spByWidth)),
+                          Text(esitSiralama,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15.0.spByWidth)),
                         ],
                       ),
                     ),
