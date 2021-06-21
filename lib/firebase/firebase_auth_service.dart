@@ -1,4 +1,3 @@
-import 'package:dershane/AuthBaseVeli/auth_base_ogrenci.dart';
 import 'package:dershane/firebase/auth_base.dart';
 import 'package:dershane/model/ogrenci.dart';
 import 'package:dershane/model/ogretmenModel.dart';
@@ -56,7 +55,6 @@ class FirebaseAuthService implements AuthBase {
     print("giris yapıldı");
     return _userFromFirebaseOgrenci(sonuc.user);
   }
-
 
 
 

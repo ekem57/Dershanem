@@ -1,8 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dershane/model/konusma.dart';
+import 'package:dershane/model/mesaj.dart';
 import 'package:dershane/model/ogretmenModel.dart';
 import 'package:dershane/model/ogrenci.dart';
 import 'package:dershane/model/veliModel.dart';
 import 'package:dershane/model/yoneticiModel.dart';
+import 'package:dershane/user_state/ogretmen_model_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class FirestoreDBService  {
 
@@ -320,6 +324,298 @@ class FirestoreDBService  {
         .set(istek);
     return true;
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ///////Chat Başlangıç
+
+
+  @override
+  Stream<List<Konusma>> getAllConversations(String userID)  {
+    var querySnapshot = _firebaseDB
+        .collection("sohbetler")
+        .doc(userID)
+        .collection("sohbetler")
+        .orderBy("olusturulma_tarihi", descending: true)
+        .snapshots();
+
+
+    return  querySnapshot.map((mesajListesi) => mesajListesi.docs
+        .map((mesaj) => Konusma.fromMap(mesaj.data()))
+        .toList());
+  }
+
+
+
+  @override
+  Stream<List<Mesaj>> getMessages(
+      String currentUserID, String sohbetEdilenUserID) {
+    var snapShot = _firebaseDB
+        .collection("sohbetler")
+        .doc(currentUserID)
+        .collection("sohbetler")
+        .doc(sohbetEdilenUserID)
+        .collection("mesajlar")
+        .where("konusmaSahibi", isEqualTo: currentUserID)
+        .orderBy("date", descending: true)
+        .limit(1)
+        .snapshots();
+    return snapShot.map((mesajListesi) => mesajListesi.docs
+        .map((mesaj) => Mesaj.fromMap(mesaj.data()))
+        .toList());
+  }
+
+  @override
+  Stream<List<DocumentSnapshot>> getMessagesDoc (String currentUserID, String sohbetEdilenUserID){
+
+    var snapShot = _firebaseDB
+        .collection("sohbetler")
+        .doc(currentUserID)
+        .collection("sohbetler")
+        .doc(sohbetEdilenUserID)
+        .collection("mesajlar")
+        .where("konusmaSahibi", isEqualTo: currentUserID)
+        .orderBy("date", descending: true)
+        .limit(1)
+        .snapshots();
+
+
+    return  snapShot.map((mesajListesi) => mesajListesi.docs.toList());
+
+
+  }
+
+
+  Future<bool> saveMessage(Mesaj kaydedilecekMesaj,String userid) async {
+    var _mesajID = _firebaseDB.collection("sohbetler").doc(userid).collection("sohbetler").doc().id;
+    var _myDocumentID = kaydedilecekMesaj.kime;
+    var _receiverDocumentID = kaydedilecekMesaj.kimden;
+
+    var _kaydedilecekMesajMapYapisi = kaydedilecekMesaj.toMap();
+
+    await _firebaseDB
+        .collection("sohbetler")
+        .doc(userid)
+        .collection("sohbetler")
+        .doc(_myDocumentID)
+        .collection("mesajlar")
+        .doc(_mesajID)
+        .set(_kaydedilecekMesajMapYapisi);
+
+    await _firebaseDB.collection("sohbetler").doc(userid)
+        .collection("sohbetler").doc(_myDocumentID).set({
+      "konusma_sahibi": kaydedilecekMesaj.kimden,
+      "kimle_konusuyor": kaydedilecekMesaj.kime,
+      "son_yollanan_mesaj": kaydedilecekMesaj.mesaj,
+      "konusma_goruldu": false,
+      "olusturulma_tarihi": FieldValue.serverTimestamp(),
+    });
+
+    _kaydedilecekMesajMapYapisi.update("bendenMi", (deger) => false);
+    _kaydedilecekMesajMapYapisi.update(
+        "konusmaSahibi", (deger) => kaydedilecekMesaj.kime);
+
+    await _firebaseDB
+        .collection("sohbetler")
+        .doc(kaydedilecekMesaj.kime)
+        .collection("sohbetler")
+        .doc(_receiverDocumentID)
+        .collection("mesajlar")
+        .doc(_mesajID)
+        .set(_kaydedilecekMesajMapYapisi);
+
+    await _firebaseDB
+        .collection("sohbetler")
+        .doc(kaydedilecekMesaj.kime)
+        .collection("sohbetler")
+        .doc(_receiverDocumentID)
+        .set({
+      "konusma_sahibi": kaydedilecekMesaj.kime,
+      "kimle_konusuyor": kaydedilecekMesaj.kimden,
+      "son_yollanan_mesaj": kaydedilecekMesaj.mesaj,
+      "konusma_goruldu": false,
+      "olusturulma_tarihi": FieldValue.serverTimestamp(),
+    });
+
+    return true;
+  }
+
+  @override
+  Future<DateTime> saatiGoster(String userID) async {
+    await _firebaseDB.collection("server").doc(userID).set({
+      "saat": FieldValue.serverTimestamp(),
+    });
+
+    var okunanMap =
+    await _firebaseDB.collection("server").doc(userID).get();
+    Timestamp okunanTarih = okunanMap["saat"];
+    return okunanTarih.toDate();
+  }
+
+
+  @override
+  bool mesajguncelle (String currentUserID, String sohbetEdilenUserID,String docid){
+
+    var snapShot =  _firebaseDB
+        .collection("sohbetler")
+        .doc(currentUserID)
+        .collection("sohbetler")
+        .doc(sohbetEdilenUserID)
+        .collection("mesajlar").doc(docid).update({'goruldumu' :true});
+
+    _firebaseDB
+        .collection("sohbetler")
+        .doc(currentUserID)
+        .collection("sohbetler")
+        .doc(sohbetEdilenUserID).update({'son_gorulme' : true});
+
+    return true;
+  }
+  @override
+  Future<List<Ogretmen>> getUserwithPagination(Ogretmen enSonGetirilenUser, int getirilecekElemanSayisi) async {
+    QuerySnapshot _querySnapshot;
+    List<Ogretmen> _tumKullanicilar = [];
+
+    if (enSonGetirilenUser == null) {
+      _querySnapshot = await FirebaseFirestore.instance
+          .collection("sohbetler")
+          .doc(FirebaseAuth.instance.currentUser.uid)
+          .collection("sohbetler")
+          .orderBy("olusturulma_tarihi", descending: true)
+          .limit(getirilecekElemanSayisi)
+          .get();
+    } else {
+      _querySnapshot = await FirebaseFirestore.instance
+          .collection("sohbetler")
+          .doc(FirebaseAuth.instance.currentUser.uid)
+          .collection("sohbetler")
+          .orderBy("olusturulma_tarihi", descending: true)
+          .limit(getirilecekElemanSayisi)
+          .get();
+
+      await Future.delayed(Duration(seconds: 1));
+    }
+
+    for (DocumentSnapshot snap in _querySnapshot.docs) {
+      print("userid: "+snap['kimle_konusuyor'].toString());
+      DocumentSnapshot  snapshot =  await FirebaseFirestore.instance.collection("ogretmen").doc(snap['kimle_konusuyor']).get();
+      Ogretmen _tekUser = Ogretmen.fromMap(snapshot.data());
+      _tumKullanicilar.add(_tekUser);
+    }
+
+    return _tumKullanicilar;
+  }
+
+
+  @override
+  Future<List<Yonetici>> getUserwithPaginationYonetici(Yonetici enSonGetirilenUser, int getirilecekElemanSayisi) async {
+    QuerySnapshot _querySnapshot;
+    List<Yonetici> _tumKullanicilar = [];
+
+    if (enSonGetirilenUser == null) {
+      _querySnapshot = await FirebaseFirestore.instance
+          .collection("sohbetler")
+          .doc(FirebaseAuth.instance.currentUser.uid)
+          .collection("sohbetler")
+          .orderBy("olusturulma_tarihi", descending: true)
+          .limit(getirilecekElemanSayisi)
+          .get();
+    } else {
+      _querySnapshot = await FirebaseFirestore.instance
+          .collection("sohbetler")
+          .doc(FirebaseAuth.instance.currentUser.uid)
+          .collection("sohbetler")
+          .orderBy("olusturulma_tarihi", descending: true)
+          .limit(getirilecekElemanSayisi)
+          .get();
+
+      await Future.delayed(Duration(seconds: 1));
+    }
+
+    for (DocumentSnapshot snap in _querySnapshot.docs) {
+      print("userid: "+snap['kimle_konusuyor'].toString());
+      DocumentSnapshot  snapshot =  await FirebaseFirestore.instance.collection("yonetici").doc(snap['kimle_konusuyor']).get();
+      Yonetici _tekUser = Yonetici.fromMap(snapshot.data());
+      _tumKullanicilar.add(_tekUser);
+    }
+
+    return _tumKullanicilar;
+  }
+
+
+  Future<List<Mesaj>> getMessagewithPagination(
+      String currentUserID,
+      String sohbetEdilenUserID,
+      Mesaj enSonGetirilenMesaj,
+      int getirilecekElemanSayisi) async {
+    QuerySnapshot _querySnapshot;
+    List<Mesaj> _tumMesajlar = [];
+
+    if (enSonGetirilenMesaj == null) {
+      _querySnapshot = await FirebaseFirestore.instance
+          .collection("sohbetler")
+          .doc(currentUserID)
+          .collection("sohbetler")
+          .doc(sohbetEdilenUserID)
+          .collection("mesajlar")
+          .where("konusmaSahibi", isEqualTo: currentUserID)
+          .orderBy("date", descending: true)
+          .limit(getirilecekElemanSayisi)
+          .get();
+    } else {
+      _querySnapshot = await FirebaseFirestore.instance
+          .collection("sohbetler")
+          .doc(currentUserID)
+          .collection("sohbetler")
+          .doc(sohbetEdilenUserID)
+          .collection("mesajlar")
+          .where("konusmaSahibi", isEqualTo: currentUserID)
+          .orderBy("date", descending: true)
+          .startAfter([enSonGetirilenMesaj.date])
+          .limit(getirilecekElemanSayisi)
+          .get();
+
+      await Future.delayed(Duration(seconds: 1));
+    }
+
+    for (DocumentSnapshot snap in _querySnapshot.docs) {
+
+      Mesaj _tekMesaj = Mesaj.fromMap(snap.data());
+      _tumMesajlar.add(_tekMesaj);
+    }
+    print("gelen toplam mesaj:"+_querySnapshot.docs.length.toString());
+
+    return _tumMesajlar;
+  }
+
+
+
 
 
 }

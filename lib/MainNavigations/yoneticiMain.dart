@@ -18,6 +18,7 @@ import 'package:dershane/yoneticiSayfalari/sinifAc.dart';
 import 'package:dershane/yoneticiSayfalari/sinifOlustur.dart';
 import 'package:dershane/yoneticiSayfalari/yoneticiAnasayfa.dart';
 import 'package:dershane/yoneticiSayfalari/yoneticiKayitOnayla.dart';
+import 'package:dershane/yoneticiSayfalari/yoneticiMesaj.dart';
 import 'package:flutter/material.dart';
 import 'dart:collection';
 import 'package:provider/provider.dart';
@@ -294,7 +295,7 @@ class _YoneticiMainNavigationState extends State<YoneticiMainNavigation> {
       case 2:
         return SikayetTavsiyeSayfasi();
       case 3:
-        return OgretmenlerSohbet();
+        return YoneticiMesaj();
       case 4:
         return SinifOlustur();
     }

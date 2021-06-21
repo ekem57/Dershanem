@@ -104,7 +104,7 @@ class OgretmenKayitKart extends StatelessWidget {
                         message: "Bu öğretmeni kayıt etmek istediğinizden emin misiniz?",
                         onPostivePressed: () async {
                          await _firestoreDBService.ogretmenOnay(card);
-                          card.reference.delete();
+
                           Navigator.pop(context);
                           Navigator.pop(context);
 

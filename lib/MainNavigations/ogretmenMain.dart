@@ -123,7 +123,7 @@ class _OgretmenMainNavigationState extends State<OgretmenMainNavigation> {
       case 2:
         return OgrenciTavsiyeVer();
       case 3:
-        return OgretmenlerSohbet();
+        return MesajlarAnasayfa();
       case 4:
         return OgretmenDuyurularSayfasi();
       case 5:

@@ -1,3 +1,7 @@
+import 'package:dershane/ChattApp/alluserModel.dart';
+import 'package:dershane/ChattApp/alluserModelYonetici.dart';
+import 'package:dershane/ChattApp/chat_view_model.dart';
+import 'package:dershane/ChattApp/chat_view_model_Yonetici.dart';
 import 'package:dershane/LandingPage.dart';
 import 'package:dershane/extensions/size_config.dart';
 import 'package:dershane/locator.dart';
@@ -10,6 +14,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +32,10 @@ void main() async {
         ChangeNotifierProvider(create: (_) => VeliModel()),
         ChangeNotifierProvider(create: (_) => OgretmenModel()),
         ChangeNotifierProvider(create: (_) => YoneticiModel()),
+        ChangeNotifierProvider(create: (_) => AllUserViewModel()),
+        ChangeNotifierProvider(create: (_) => AllUserViewModelYonetici()),
+        ChangeNotifierProvider(create: (_) => ChatViewModelYonetici()),
+        ChangeNotifierProvider(create: (_) => ChatViewModel()),
       ],
       child: MyApp(),
     ));
@@ -76,6 +86,14 @@ class _MyAppState extends State<MyApp> {
             color: const Color(0xff8b1afe),
           ),
         ),
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('tr', "TR"),
+        ],
 
 
         locale: const Locale('tr', "TR"),
